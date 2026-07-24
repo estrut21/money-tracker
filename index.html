@@ -1,52 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, inital-scale=1.0">
-        <title> Expense Tracker </title>
-        <link rel="stylesheet" href="style.css">
-    </head>
+  <body>
+    <section id="login-screen" class="login-screen">
+      <h1>Expense Tracker</h1>
+      <p>Login to save your money tracker</p>
 
-<body>
+      <form id="login-form">
+        <label for="username">Username:</label>
+        <input id="username" type="text" placeholder="Enter your name">
 
-    <header>
-        <h1> Expense Tracker </h1>
-        <p> Lets track money </p>
-    </header>
+        <button type="submit">Login</button>
+      </form>
+    </section>
 
-    <main>
+    <div id="app" class="hidden">
+      <header>
+        <h1>Expense Tracker</h1>
+        <p id="welcome-message">Lets track money</p>
+        <button id="logout-button" type="button">Logout</button>
+      </header>
+
+      <main>
+        <p id="message" class="message"></p>
+
         <section class="dashboard">
-            
-            <div class="card">
-                <h2> Total Money Made </h2>
-                <p> $0.00 </p>
-            </div>
+          <div class="card">
+            <h2>Total Money Made</h2>
+            <p id="total-income">$0.00</p>
+          </div>
 
-            <div class="card">
-                <h2> Total spent </h2>
-                <p> $0.00 </p>
+          <div class="card">
+            <h2>Total Spent</h2>
+            <p id="total-spent">$0.00</p>
+          </div>
 
-            </div>
-
-            <div class="card">
-                <h2> Money Left </h2>
-                <p> $0.00 </p>
-            </div>
+          <div class="card">
+            <h2>Money Left</h2>
+            <p id="money-left">$0.00</p>
+          </div>
         </section>
 
-    <section class="income">
-        <h2> Add income or money made </h2>
-        
-        <form>
-            <label> Money Made: </label>
-            <input type="text">
+        <section class="tracker-area">
+          <section class="income">
+            <h2>Add income or money made</h2>
 
-            <label> Amount: </label>
-            <input type="number">
-            sd
-        </form>
-    </section>
-    </main>
-</body>
+            <form id="income-form">
+              <label for="income-name">Money Made:</label>
+              <input id="income-name" type="text" placeholder="Work, gift, etc.">
+
+              <label for="income-amount">Amount:</label>
+              <input id="income-amount" type="number" placeholder="0.00">
+
+              <button type="submit">Add Income</button>
+            </form>
+          </section>
+
+          <section class="expense">
+            <h2>Add spending</h2>
+
+            <form id="expense-form">
+              <label for="expense-name">Spent On:</label>
+              <input id="expense-name" type="text" placeholder="Food, school, etc.">
+
+              <label for="expense-amount">Amount:</label>
+              <input id="expense-amount" type="number" placeholder="0.00">
+
+              <button type="submit">Add Spending</button>
+            </form>
+          </section>
+        </section>
+
+        <section class="history">
+          <h2>History</h2>
+          <ul id="history-list">
+            <li>No history yet</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>
