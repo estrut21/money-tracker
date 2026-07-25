@@ -28,9 +28,9 @@ let expenseAmount = document.querySelector("#expense-amount");
 let expenseName = document.querySelector("#expense-name");
 
 //Total boxes
-let incomeTotalBox = document.querySelector("#income-total");
-let expenseTotalBox = document.querySelector("#expense-total");
-let balanceTotalBox = document.querySelector("#balance-total");
+let incomeTotalBox = document.querySelector("#total-income");
+let expenseTotalBox = document.querySelector("#total-spent");
+let balanceTotalBox = document.querySelector("#money-left");
 
 //History section
 let historyList = document.querySelector("#history-list");
@@ -44,7 +44,7 @@ function saveData() {
     };
    
     localStorage.setItem(
-        "moneyTracker_" + currentUser,
+        "moneyTracker_" + savedUsername,
         JSON.stringify(data)
     );
 }
@@ -52,7 +52,7 @@ function saveData() {
 // load the users saved information
 function loadData() {
     let savedData = localStorage.getItem(
-        "moneyTracker_" + currentUser
+        "moneyTracker_" + savedUsername
     );
     if (savedData) {
         let data = JSON.parse(savedData);  //JSON parse converts the string back into an object
@@ -61,3 +61,99 @@ function loadData() {
         history = data.history;
     }
 }
+
+// update the three total boxes
+function updateTotals() {
+    incomeTotalBox.textContent = 
+    "S" + totalMoney.toFixed(2); // used toFixed(2) to round the number to 2 decimal places
+
+    expenseTotalBox.textContent =
+    "S" + totalSpent.toFixed(2);
+
+    balanceTotalBox.textContent =
+    "S" + (totalMoney - totalSpent).toFixed(2);
+}
+
+// show history on history page
+function updateHistory() {
+    historyList.innerHTML = "";
+    if (history.length === 0) {
+        let noHistoryItem = document.createElement("li");
+        noHistoryItem.textContent = "No history yet.";
+        historyList.appendChild(noHistoryItem);
+        return;
+    }
+
+// start at end of newest item appears first
+for (let i = history.length - 1; i >= 0; i--) {
+    let historyItem = history[i];
+
+    let listItem = document.createElement("li");
+
+    listItem.textContent =
+    historyItem.textContent = 
+    ": " + 
+    historyItem.name +
+    " - S" +
+    Number(historyItem.amount).toFixed(2);
+
+    historyList.appendChild(listItem);
+}
+}
+
+if (loginForm) {
+loginForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    let username = usernameBox.value.trim();
+    if (username) {
+        savedUsername = username;
+        localStorage.setItem("username", savedUsername);
+        loginScreen.style.display = "none";
+        app.style.display = "block";
+        welcomeMessage.textContent = "Welcome, " + savedUsername + "!";
+        loadData();
+        updateTotals();
+        updateHistory();
+    } else {
+        message.textContent = "Please enter a valid username.";
+    }
+});
+}
+
+// fixing add income form so it wont log us out
+if (incomeForm) {
+incomeForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    let amount = Number(incomeAmount.value);
+    if (amount > 0) {
+    totalMoney = totalMoney + amount;
+    history.push({ type: "Income", name: incomeName.value, amount: amount });
+    updateTotals();
+    saveData();
+    updateHistory();
+    incomeAmount.value = "";
+    }
+});
+}
+
+// Show saved data when history.html is open.
+let historyUsername = document.querySelector("#history-username");
+if (historyUsername && savedUsername) {
+    historyUsername.textContent = "History for " + savedUsername;
+    loadData();
+    updateHistory();
+}
+
+//fix spending form so it wont log us out
+expenseForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    let amount = Number(expenseAmount.value);
+    if (amount > 0) {
+        totalSpent = totalSpent + amount;
+        history.push({ type: "Expense", name: expenseName.value, amount: amount });
+        updateTotals();
+        saveData();
+        updateHistory();
+        expenseAmount.value = "";
+    }
+});
