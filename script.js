@@ -179,21 +179,3 @@ if (savedUsername && loginScreen && app) {
     updateTotals();
     updateHistory();
 }
-
-<form id="expense-form">
-  <label for="expense-name">Expense Name:</label>
-  <input id="expense-name" type="text" required placeholder="Enter expense name" />
-
-<label for="expense-category">Category:</label>
-<select id="expense-category">
-  <option value="Food">Food</option>
-    <option value="Transportation">Transportation</option>
-    <option value="School">School</option>
-    <option value="Entertainment">Entertainment</option>
-    <option value="Other">Other</option>
-    </select>
-    <label for="expense-amount">Amount:</label>
-    <input id="expense-amount" type="number" placeholder="0.00">
-    <button type="submit">Add Expense</button>
-    </input>
-    </form>
