@@ -56,22 +56,22 @@ function loadData() {
     );
     if (savedData) {
         let data = JSON.parse(savedData);  //JSON parse converts the string back into an object
-        totalMoney = data.income;
-        totalSpent = data.expenses;
-        history = data.history;
+        totalMoney = Number(data.income) || 0;
+        totalSpent = Number(data.expenses) || 0;
+        history = Array.isArray(data.history) ? data.history : [];
     }
 }
 
 // update the three total boxes
 function updateTotals() {
     incomeTotalBox.textContent = 
-    "S" + totalMoney.toFixed(2); // used toFixed(2) to round the number to 2 decimal places
+    "$" + totalMoney.toFixed(2); // used toFixed(2) to round the number to 2 decimal places
 
     expenseTotalBox.textContent =
-    "S" + totalSpent.toFixed(2);
+    "$" + totalSpent.toFixed(2);
 
     balanceTotalBox.textContent =
-    "S" + (totalMoney - totalSpent).toFixed(2);
+    "$" + (totalMoney - totalSpent).toFixed(2);
 }
 
 // show history on history page
@@ -91,10 +91,10 @@ for (let i = history.length - 1; i >= 0; i--) {
     let listItem = document.createElement("li");
 
     listItem.textContent =
-    historyItem.textContent = 
-    ": " + 
+    historyItem.type +
+    ": " +
     historyItem.name +
-    " - S" +
+    " - $" +
     Number(historyItem.amount).toFixed(2);
 
     historyList.appendChild(listItem);
@@ -145,6 +145,7 @@ if (historyUsername && savedUsername) {
 }
 
 //fix spending form so it wont log us out
+if (expenseForm) {
 expenseForm.addEventListener("submit", function (event) {
     event.preventDefault();
     let amount = Number(expenseAmount.value);
@@ -157,3 +158,42 @@ expenseForm.addEventListener("submit", function (event) {
         expenseAmount.value = "";
     }
 });
+}
+
+//logout button
+if (logoutButton) {
+logoutButton.addEventListener("click", function () {
+    localStorage.removeItem("username");
+    savedUsername = null;
+    loginScreen.style.display = "block";
+    app.style.display = "none";
+});
+}
+
+// Keep the dashboard open when a saved user refreshes the page.
+if (savedUsername && loginScreen && app) {
+    loginScreen.style.display = "none";
+    app.style.display = "block";
+    welcomeMessage.textContent = "Welcome, " + savedUsername + "!";
+    loadData();
+    updateTotals();
+    updateHistory();
+}
+
+<form id="expense-form">
+  <label for="expense-name">Expense Name:</label>
+  <input id="expense-name" type="text" required placeholder="Enter expense name" />
+
+<label for="expense-category">Category:</label>
+<select id="expense-category">
+  <option value="Food">Food</option>
+    <option value="Transportation">Transportation</option>
+    <option value="School">School</option>
+    <option value="Entertainment">Entertainment</option>
+    <option value="Other">Other</option>
+    </select>
+    <label for="expense-amount">Amount:</label>
+    <input id="expense-amount" type="number" placeholder="0.00">
+    <button type="submit">Add Expense</button>
+    </input>
+    </form>
